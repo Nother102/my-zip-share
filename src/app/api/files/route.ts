@@ -1,47 +1,49 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import path from "path";
-import fs from "fs/promises";
-import { readdirSync, existsSync, readFileSync } from "fs";
+import { readdir, readFile } from "fs/promises";
+import { existsSync } from "fs";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const filesDir = path.join(process.cwd(), "public", "files");
   const previewsDir = path.join(process.cwd(), "public", "previews");
+  const filenames = await readdir(filesDir);
 
-  const files = readdirSync(filesDir).filter((f) => f.endsWith(".zip"));
+  const zipFiles = filenames.filter((name) => name.endsWith(".zip"));
 
-  const fileData = await Promise.all(
-    files.map(async (file, index) => {
-      const id = String(index + 1);
-      const baseName = file.replace(/\.zip$/, "");
+  const data = await Promise.all(
+    zipFiles.map(async (zipName) => {
+      const id = zipName.replace(/\.zip$/, "");
+      const previewPath = path.join(previewsDir, `${id}.png`);
+      const metaPath = path.join(filesDir, `${id}.json`);
 
-      let uploadedBy = undefined;
-      let description = "";
-      let size = "";
+      let meta = {
+        description: "",
+        uploadedBy: "",
+        size: "-",
+        downloadCount: 0
+      };
 
-      const metadataPath = path.join(filesDir, `${baseName}.json`);
-      if (existsSync(metadataPath)) {
+      if (existsSync(metaPath)) {
         try {
-          const metaRaw = readFileSync(metadataPath, "utf8");
-          const metadata = JSON.parse(metaRaw);
-          uploadedBy = metadata.uploadedBy;
-          description = metadata.description;
-          size = metadata.size;
-        } catch (e) {
-          console.warn(`⚠️ ไม่สามารถอ่าน metadata สำหรับ ${file}`);
+          const raw = await readFile(metaPath, "utf8");
+          meta = JSON.parse(raw);
+        } catch (err) {
+          console.error("Failed to parse metadata for:", zipName);
         }
       }
 
       return {
         id,
-        name: file,
-        image: `/previews/${baseName}.png`,
-        date: new Date().toISOString().split("T")[0],
-        size,
-        description,
-        uploadedBy
+        name: zipName,
+        image: `/previews/${id}.png`,
+        date: "2025-04-09",
+        size: meta.size || "-",
+        description: meta.description || "",
+        uploadedBy: meta.uploadedBy || "",
+        downloadCount: meta.downloadCount || 0
       };
     })
   );
 
-  return NextResponse.json(fileData);
+  return NextResponse.json(data);
 }
