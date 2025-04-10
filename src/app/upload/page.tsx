@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { FileArchive, Image, User, FileText, Ruler, Upload } from "lucide-react";
+import { FileArchive, User, FileText, Ruler, Upload } from "lucide-react";
+import Image from "next/image";
 
 export default function UploadPage() {
   const { data: session, status } = useSession();
@@ -90,10 +91,29 @@ export default function UploadPage() {
             className="w-full border p-2 rounded"
           />
         </div>
-
         <div className="space-y-1">
           <label className="font-medium flex items-center gap-2">
-            <Image className="w-5 h-5" /> เลือกรูป preview (.png)
+            <Image
+              src="/file.svg"
+              alt="File icon"
+              width={20}
+              height={20}
+              className="w-5 h-5"
+            />
+            <Image
+              src="/window.svg"
+              alt="Window icon"
+              width={20}
+              height={20}
+              className="w-5 h-5"
+            />
+            <Image
+              src="/globe.svg"
+              alt="Globe icon"
+              width={20}
+              height={20}
+              className="w-5 h-5"
+            /> เลือกรูป preview (.png)
           </label>
           <input
             type="file"

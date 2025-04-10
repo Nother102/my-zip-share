@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useSession, signOut, signIn } from "next-auth/react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,7 @@ export default function HomePage() {
     fetchFiles();
   }, []);
 
-  const isUserAdmin = session?.user?.email === "nother102102@gmail.com";
+  const isUserAdmin = session?.user?.isAdmin ?? false;
 
   const filteredFiles = files.filter((file) => {
     const q = searchTerm.toLowerCase();
@@ -99,9 +100,11 @@ export default function HomePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {filteredFiles.map((file) => (
           <Card key={file.id}>
-            <img
+            <Image
               src={file.image}
               alt={file.name}
+              width={400}
+              height={200}
               className="rounded-t w-full h-48 object-cover"
             />
             <CardContent className="space-y-2">

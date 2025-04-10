@@ -3,12 +3,12 @@ import path from "path";
 import fs from "fs/promises";
 import { existsSync } from "fs";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { isAdmin } from "@/lib/auth";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session || !isAdmin(session.user?.email)) {
+  if (!session || !isAdmin(session.user?.email ?? '')) {
     return new NextResponse("Forbidden", { status: 403 });
   }
 
@@ -34,7 +34,7 @@ export async function GET() {
       status: 200,
       headers: { "Content-Type": "text/plain; charset=utf-8" }
     });
-  } catch (err) {
+  } catch {
     return new NextResponse("เกิดข้อผิดพลาดในการอ่าน log", { status: 500 });
   }
 }

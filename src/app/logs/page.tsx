@@ -27,8 +27,8 @@ export default function LogsPage() {
         if (!res.ok) throw new Error("ไม่สามารถโหลด log ได้");
         const text = await res.text();
         setLogs(text);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : String(err));
       } finally {
         setLoading(false);
       }

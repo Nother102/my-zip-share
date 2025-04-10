@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
@@ -68,15 +69,17 @@ export default function FileDetailPage() {
     return <div className="p-6 text-red-600">❌ ไม่พบไฟล์ที่ต้องการ</div>;
   }
 
-  const isUserAdmin = isAdmin(session?.user?.email);
+  const isUserAdmin = isAdmin(session?.user?.email ?? '');
 
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">📦 {file.name}</h1>
-      <img
+      <Image
         src={file.image}
         alt={file.name}
+        width={500}
+        height={300}
         className="rounded mb-4 w-full max-h-96 object-cover"
       />
       <p className="text-gray-600 mb-2">📅 วันที่อัปโหลด: {file.date}</p>

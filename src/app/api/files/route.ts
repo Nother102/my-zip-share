@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import path from "path";
 import { readdir, readFile } from "fs/promises";
 import { existsSync } from "fs";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const filesDir = path.join(process.cwd(), "public", "files");
   const previewsDir = path.join(process.cwd(), "public", "previews");
   const filenames = await readdir(filesDir);
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const data = await Promise.all(
     zipFiles.map(async (zipName) => {
       const id = zipName.replace(/\.zip$/, "");
-      const previewPath = path.join(previewsDir, `${id}.png`);
+      path.join(previewsDir, `${id}.png`);
       const metaPath = path.join(filesDir, `${id}.json`);
 
       let meta = {
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         try {
           const raw = await readFile(metaPath, "utf8");
           meta = JSON.parse(raw);
-        } catch (err) {
+        } catch {
           console.error("Failed to parse metadata for:", zipName);
         }
       }
