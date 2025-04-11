@@ -1,4 +1,3 @@
-/*
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { DefaultSession } from "next-auth";
@@ -16,10 +15,10 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
     })
   ],
-  secret: process.env.NEXTAUTH_SECRET!,
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async session({ session, token }) {
       if (session.user) {
@@ -32,13 +31,12 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.isAdmin = await isAdmin(user.email!);
       }
-      return token as typeof token & { isAdmin: boolean };
+      return token;
     }
   }
 };
 
 export function isAdmin(email: string): boolean {
-  const adminEmails = process.env.ADMIN_EMAILS?.split(',') || [];
+  const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
   return adminEmails.includes(email);
 }
-*/

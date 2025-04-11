@@ -3,8 +3,8 @@ import { writeFile, appendFile } from "fs/promises";
 import path from "path";
 import { mkdirSync, existsSync } from "fs";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { isAdmin } from "@/lib/auth";
+import { authOptions } from "@/lib/authOptions";
+import { isAdmin } from "@/lib/authOptions";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);

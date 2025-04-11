@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { isAdmin } from "@/lib/auth";
+//import { isAdmin } from "@/lib/authOptions";
 
 interface FileData {
   id: string;
@@ -69,7 +69,9 @@ export default function FileDetailPage() {
     return <div className="p-6 text-red-600">❌ ไม่พบไฟล์ที่ต้องการ</div>;
   }
 
-  const isUserAdmin = isAdmin(session?.user?.email ?? '');
+  const isUserAdmin = session?.user?.isAdmin;
+
+
 
 
   return (

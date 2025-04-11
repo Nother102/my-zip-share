@@ -3,8 +3,8 @@ import path from "path";
 import fs from "fs/promises";
 import { existsSync } from "fs";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { isAdmin } from "@/lib/auth";
+import { authOptions } from "@/lib/authOptions";
+import { isAdmin } from "@/lib/authOptions";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
